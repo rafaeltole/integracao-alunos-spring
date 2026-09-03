@@ -1,0 +1,152 @@
+{
+  "info": {
+    "_postman_id": "2c7519d1-8e76-4f11-a641-fd1ff544efc4",
+    "name": "Integração Alunos Spring",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57353192",
+    "_collection_link": "https://go.postman.co/collection/57353192-2c7519d1-8e76-4f11-a641-fd1ff544efc4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "cadastrar",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"rm\": \"2\",\n    \"nome\": \"Aluno 2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizar",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{    \n    \"nome\": \"Aluno 3 - Atualizado\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/alunos/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulta",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulta por codigo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/alunos/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulta por Nome",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/alunos?nome=Aluno 1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos"
+          ],
+          "query": [
+            {
+              "key": "nome",
+              "value": "Aluno 1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Remover",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/alunos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
