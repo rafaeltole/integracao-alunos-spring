@@ -2,9 +2,10 @@ package br.com.fiap.service;
 
 import br.com.fiap.dto.AlunoRequest;
 import br.com.fiap.dto.AlunoResponse;
+import br.com.fiap.dto.MatriculaResponse;
 import br.com.fiap.entity.Aluno;
+import br.com.fiap.entity.Matricula;
 import br.com.fiap.exception.AlunoNaoEncontradoException;
-import br.com.fiap.exception.RmJaCadastradoException;
 import br.com.fiap.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,10 @@ public class AlunoService {
     }
 
     public AlunoResponse cadastrar(AlunoRequest alunoRequest) {
-        Optional<Aluno> retornoConsulta = alunoRepository.findByRm(alunoRequest.rm());
-        if (retornoConsulta.isPresent()) {
-            throw new RmJaCadastradoException("O [rm=" + alunoRequest.rm() + "] informado pertence a outro aluno");
-        }
+//        Optional<Aluno> retornoConsulta = alunoRepository.findByRm(alunoRequest.rm());
+//        if (retornoConsulta.isPresent()) {
+//            throw new RmJaCadastradoException("O [rm=" + alunoRequest.rm() + "] informado pertence a outro aluno");
+//        }
 
         Aluno novoAluno = alunoRequest.toEntity();
         Aluno alunoCadastrado = alunoRepository.save(novoAluno);
@@ -89,4 +90,17 @@ public class AlunoService {
         }
     }
 
+    public List<MatriculaResponse> consultarMatriculas(Long alunoId) {
+        Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
+        if (retornoConsulta.isEmpty()) {
+            throw new AlunoNaoEncontradoException("Aluno [id=" + alunoId + "] não encontrado");
+        }
+
+        Aluno aluno = retornoConsulta.get();
+        List<Matricula> matriculas = aluno.getMatriculas();
+
+        List<MatriculaResponse> matriculasResponse = MatriculaResponse.from(matriculas);
+
+        return matriculasResponse;
+    }
 }

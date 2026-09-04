@@ -3,14 +3,13 @@ package br.com.fiap.dto;
 import br.com.fiap.entity.Aluno;
 
 public record AlunoResponse(
-        Long codigo,
-        String rm,
+        Long id,
         String nome) {
 
     public static AlunoResponse from(Aluno aluno) {
         return new AlunoResponse(
-                aluno.getCodigo(),
-                aluno.getRm(),
+                aluno.getId(),
+//                aluno.getRm(),
                 aluno.getNome()
         );
     }

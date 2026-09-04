@@ -2,6 +2,7 @@ package br.com.fiap.controller;
 
 import br.com.fiap.dto.AlunoRequest;
 import br.com.fiap.dto.AlunoResponse;
+import br.com.fiap.dto.MatriculaResponse;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.service.AlunoService;
 import jakarta.validation.Valid;
@@ -56,6 +57,12 @@ public class AlunoResource {
     public ResponseEntity<Object> remover(@PathVariable Long codigo) {
         alunoService.remover(codigo);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/{id}/matriculas", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MatriculaResponse>> consultarMatriculas(@PathVariable Long id) {
+        List<MatriculaResponse> matriculas = alunoService.consultarMatriculas(id);
+        return ResponseEntity.ok(matriculas);
     }
 
 }

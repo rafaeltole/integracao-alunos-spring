@@ -10,7 +10,7 @@ public record AlunoRequest(
     public Aluno toEntity() {
         Aluno aluno = new Aluno();
         aluno.setNome(nome);
-        aluno.setRm(rm);
+//        aluno.setRm(rm);
         return aluno;
     }
 

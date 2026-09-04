@@ -1,10 +1,6 @@
 package br.com.fiap.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -12,38 +8,36 @@ import java.util.List;
 public class Aluno {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo;
-
-    private String rm;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "aluno_seq", allocationSize = 1)
+    private Long id;
 
     private String nome;
 
     @OneToMany(mappedBy = "aluno")
     private List<Matricula> matriculas;
 
-    public Long getCodigo() {
-        return codigo;
+    public Long getId() {
+        return id;
     }
 
-    public void setCodigo(final Long codigo) {
-        this.codigo = codigo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(final String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getRm() {
-        return rm;
+    public List<Matricula> getMatriculas() {
+        return matriculas;
     }
 
-    public void setRm(final String rm) {
-        this.rm = rm;
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
-
 }

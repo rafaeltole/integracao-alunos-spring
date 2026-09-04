@@ -24,7 +24,7 @@ public class AlunoServiceIT {
         AlunoRequest novoAluno = new AlunoRequest("123", "Aluno Test");
 
         Aluno alunoCadastrado = novoAluno.toEntity();
-        alunoCadastrado.setCodigo(1L);
+        alunoCadastrado.setId(1L);
 
         Mockito.when(repository.save(Mockito.any(Aluno.class))).thenReturn(alunoCadastrado);
 
