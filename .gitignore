@@ -33,3 +33,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+*.bkp
+integracao-alunos-db-srt.properties
