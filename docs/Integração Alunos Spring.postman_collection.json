@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "2c7519d1-8e76-4f11-a641-fd1ff544efc4",
+    "_postman_id": "c024162f-dc58-4cb3-9b13-46f7065aeb87",
     "name": "Integração Alunos Spring",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "57353192",
-    "_collection_link": "https://go.postman.co/collection/57353192-2c7519d1-8e76-4f11-a641-fd1ff544efc4?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/57353192-c024162f-dc58-4cb3-9b13-46f7065aeb87?source=collection_link"
   },
   "item": [
     {
@@ -14,7 +14,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"rm\": \"2\",\n    \"nome\": \"Aluno 2\"\n}",
+          "raw": "{    \n    \"nome\": \"Aluno 7\",\n    \"perfil\": {\n        \"titulo\": \"Titulo Aluno 7\",\n        \"descricao\": \"Descriçao Aluno 7\"\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -42,7 +42,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{    \n    \"nome\": \"Aluno 3 - Atualizado\"\n}",
+          "raw": "{    \n    \"nome\": \"Aluno 7 Atualizado\",\n    \"perfil\": {\n        \"titulo\": \"Titulo Aluno 7 Atualizado\",\n        \"descricao\": \"Descriçao Aluno 7 Atualizado\"\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -50,7 +50,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/alunos/3",
+          "raw": "http://localhost:8080/alunos/7",
           "protocol": "http",
           "host": [
             "localhost"
@@ -58,7 +58,7 @@
           "port": "8080",
           "path": [
             "alunos",
-            "3"
+            "7"
           ]
         }
       },
@@ -89,7 +89,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/alunos/3",
+          "raw": "http://localhost:8080/alunos/6",
           "protocol": "http",
           "host": [
             "localhost"
@@ -97,7 +97,28 @@
           "port": "8080",
           "path": [
             "alunos",
-            "3"
+            "6"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulta Perfil",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/alunos/6/perfil",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "alunos",
+            "6",
+            "perfil"
           ]
         }
       },
@@ -134,7 +155,7 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/alunos/1",
+          "raw": "http://localhost:8080/alunos/7",
           "protocol": "http",
           "host": [
             "localhost"
@@ -142,7 +163,7 @@
           "port": "8080",
           "path": [
             "alunos",
-            "1"
+            "7"
           ]
         }
       },

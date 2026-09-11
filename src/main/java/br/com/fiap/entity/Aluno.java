@@ -2,6 +2,8 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +21,20 @@ public class Aluno {
 
     @OneToMany(mappedBy = "aluno")
     private List<Matricula> matriculas;
+
+    private LocalDate cadastradoEm;
+
+    private LocalDateTime atualizadoEm;
+
+    @PrePersist
+    public void configuraDataCadastro() {
+        cadastradoEm = LocalDate.now();
+    }
+
+    @PreUpdate
+    public void configuraDataAtualizacao() {
+        atualizadoEm = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -51,4 +67,13 @@ public class Aluno {
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
     }
+
+    public LocalDate getCadastradoEm() {
+        return cadastradoEm;
+    }
+
+    public LocalDateTime getAtualizadoEm() {
+        return atualizadoEm;
+    }
+
 }

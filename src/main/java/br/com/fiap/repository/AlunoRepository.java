@@ -13,4 +13,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     List<Aluno> findByNome(String nome);
 
+    boolean existsByNome(String aluno);
+
 }
