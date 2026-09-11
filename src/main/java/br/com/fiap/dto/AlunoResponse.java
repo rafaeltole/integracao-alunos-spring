@@ -9,7 +9,6 @@ public record AlunoResponse(
     public static AlunoResponse from(Aluno aluno) {
         return new AlunoResponse(
                 aluno.getId(),
-//                aluno.getRm(),
                 aluno.getNome()
         );
     }

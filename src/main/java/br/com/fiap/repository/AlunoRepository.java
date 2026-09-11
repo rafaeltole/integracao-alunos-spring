@@ -13,6 +13,4 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     List<Aluno> findByNome(String nome);
 
-//    Optional<Aluno> findByRm(String rm);
-
 }

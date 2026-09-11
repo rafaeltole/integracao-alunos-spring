@@ -2,6 +2,7 @@ package br.com.fiap.service;
 
 
 import br.com.fiap.dto.AlunoRequest;
+import br.com.fiap.dto.PerfilRequest;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.exception.RmJaCadastradoException;
 import br.com.fiap.repository.AlunoRepository;
@@ -26,7 +27,7 @@ public class AlunoServiceTest {
 
     @Test
     public void dadoUmAlunoValidoCadastrarNoBancoDeDados() {
-        AlunoRequest novoAluno = new AlunoRequest("123", "Aluno Test");
+        AlunoRequest novoAluno = new AlunoRequest("123", new PerfilRequest("Titulo", "Aluno Test"));
 
         Aluno alunoCadastrado = novoAluno.toEntity();
         alunoCadastrado.setId(1L);

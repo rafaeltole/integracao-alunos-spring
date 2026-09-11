@@ -14,6 +14,9 @@ public class Aluno {
 
     private String nome;
 
+    @OneToOne(mappedBy = "aluno", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private Perfil perfil;
+
     @OneToMany(mappedBy = "aluno")
     private List<Matricula> matriculas;
 
@@ -31,6 +34,14 @@ public class Aluno {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
 
     public List<Matricula> getMatriculas() {

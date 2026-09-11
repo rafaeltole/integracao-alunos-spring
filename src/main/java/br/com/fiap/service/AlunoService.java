@@ -1,10 +1,9 @@
 package br.com.fiap.service;
 
-import br.com.fiap.dto.AlunoRequest;
-import br.com.fiap.dto.AlunoResponse;
-import br.com.fiap.dto.MatriculaResponse;
+import br.com.fiap.dto.*;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.entity.Matricula;
+import br.com.fiap.entity.Perfil;
 import br.com.fiap.exception.AlunoNaoEncontradoException;
 import br.com.fiap.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
@@ -24,12 +23,14 @@ public class AlunoService {
     }
 
     public AlunoResponse cadastrar(AlunoRequest alunoRequest) {
-//        Optional<Aluno> retornoConsulta = alunoRepository.findByRm(alunoRequest.rm());
-//        if (retornoConsulta.isPresent()) {
-//            throw new RmJaCadastradoException("O [rm=" + alunoRequest.rm() + "] informado pertence a outro aluno");
-//        }
-
         Aluno novoAluno = alunoRequest.toEntity();
+
+        PerfilRequest perfilRequest = alunoRequest.perfil();
+        Perfil perfil = perfilRequest.toEntity();
+
+        novoAluno.setPerfil(perfil);
+        perfil.setAluno(novoAluno);
+
         Aluno alunoCadastrado = alunoRepository.save(novoAluno);
 
         return AlunoResponse.from(alunoCadastrado);
@@ -69,14 +70,20 @@ public class AlunoService {
         return alunosResponse;
     }
 
-    public AlunoResponse atualizar(Long codigo, Aluno aluno) {
+    public AlunoResponse atualizar(Long codigo, AlunoRequest aluno) {
         Optional<Aluno> retornoConsulta = alunoRepository.findById(codigo);
         if (retornoConsulta.isEmpty()) {
             throw new AlunoNaoEncontradoException("Aluno [codigo=" + codigo + "] não encontrado.");
         }
 
         Aluno alunoCadastrado = retornoConsulta.get();
-        alunoCadastrado.setNome(aluno.getNome());
+        alunoCadastrado.setNome(aluno.nome());
+
+        PerfilRequest perfilRequest = aluno.perfil();
+
+        Perfil perfil = alunoCadastrado.getPerfil();
+        perfil.setTitulo(perfilRequest.titulo());
+        perfil.setDescricao(perfilRequest.descricao());
 
         Aluno alunoAtualizado = alunoRepository.save(alunoCadastrado);
 
@@ -103,4 +110,16 @@ public class AlunoService {
 
         return matriculasResponse;
     }
+
+    public PerfilResponse consultarPerfil(Long alunoId) {
+        Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
+        if (retornoConsulta.isPresent()) {
+            Aluno aluno = retornoConsulta.get();
+            Perfil perfil = aluno.getPerfil();
+
+            return PerfilResponse.from(alunoId, perfil);
+        }
+        throw new AlunoNaoEncontradoException("Aluno [id="+ alunoId+"] não encontrado");
+    }
+
 }
