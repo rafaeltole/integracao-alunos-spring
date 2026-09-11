@@ -2,6 +2,8 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Coordenador {
 
@@ -12,8 +14,8 @@ public class Coordenador {
 
     private String nome;
 
-    @OneToOne(mappedBy = "coordenador")
-    private Curso curso;
+    @OneToMany(mappedBy = "coordenador")
+    private List<Curso> cursos;
 
     public Long getId() {
         return id;
@@ -31,11 +33,11 @@ public class Coordenador {
         this.nome = nome;
     }
 
-    public Curso getCurso() {
-        return curso;
+    public List<Curso> getCursos() {
+        return cursos;
     }
 
-    public void setCurso(Curso curso) {
-        this.curso = curso;
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
     }
 }

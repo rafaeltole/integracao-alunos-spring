@@ -24,7 +24,7 @@ public class Curso {
     )
     private List<Disciplina> disciplinas;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "coordenador_id")
     private Coordenador coordenador;
 
