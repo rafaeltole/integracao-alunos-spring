@@ -3,18 +3,6 @@
 
 # Derived Query Methods, paginação e ordenação
 
-## Objetivos da aula
-
-Ao final desta aula, você deverá ser capaz de:
-
--   entender como o Spring Data JPA cria consultas a partir do nome dos
-    métodos;
--   criar consultas utilizando **Derived Query Methods**;
--   combinar filtros como `Containing` e `IgnoreCase`;
--   utilizar `Pageable` para paginação e ordenação;
--   definir valores padrão de paginação com `@PageableDefault`.
-
-------------------------------------------------------------------------
 
 ## 1. Derived Query Methods
 
