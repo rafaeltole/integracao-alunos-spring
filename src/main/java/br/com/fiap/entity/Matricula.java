@@ -16,8 +16,8 @@ public class Matricula {
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
-    @ManyToOne
-    @JoinColumn(name = "turma_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "turma_id", nullable = false)
     private Turma turma;
 
     private String rm;

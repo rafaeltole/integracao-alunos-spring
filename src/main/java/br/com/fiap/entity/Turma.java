@@ -22,7 +22,7 @@ public class Turma {
     private List<Matricula> matriculas;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
 
     private LocalDate cadastradoEm;

@@ -4,8 +4,10 @@ import br.com.fiap.dto.*;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.entity.Matricula;
 import br.com.fiap.entity.Perfil;
+import br.com.fiap.entity.Turma;
 import br.com.fiap.exception.AlunoNaoEncontradoException;
 import br.com.fiap.repository.AlunoRepository;
+import br.com.fiap.repository.TurmaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class AlunoService {
 
     private AlunoRepository alunoRepository;
+    private TurmaRepository turmaRepository;
 
-    public AlunoService(AlunoRepository alunoRepository) {
+    public AlunoService(AlunoRepository alunoRepository, TurmaRepository turmaRepository) {
         this.alunoRepository = alunoRepository;
+        this.turmaRepository = turmaRepository;
     }
 
     public AlunoResponse cadastrar(AlunoRequest alunoRequest) {
@@ -60,7 +64,7 @@ public class AlunoService {
     public List<AlunoResponse> consultarPorNome(String nome) {
         List<AlunoResponse> alunosResponse = new ArrayList<>();
 
-        List<Aluno> alunosCadastrados = alunoRepository.findByNome(nome);
+        List<Aluno> alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome);
 
         for (Aluno alunoCadastrado : alunosCadastrados) {
             AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
@@ -111,6 +115,12 @@ public class AlunoService {
         return matriculasResponse;
     }
 
+    public List<TurmaResponse> consultarTurmas(Long alunoId) {
+        List<Turma> turmas = turmaRepository.findByMatriculasAlunoId(alunoId);
+
+        return TurmaResponse.from(turmas);
+    }
+
     public PerfilResponse consultarPerfil(Long alunoId) {
         Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
         if (retornoConsulta.isPresent()) {
@@ -119,7 +129,7 @@ public class AlunoService {
 
             return PerfilResponse.from(alunoId, perfil);
         }
-        throw new AlunoNaoEncontradoException("Aluno [id="+ alunoId+"] não encontrado");
+        throw new AlunoNaoEncontradoException("Aluno [id=" + alunoId + "] não encontrado");
     }
 
 }

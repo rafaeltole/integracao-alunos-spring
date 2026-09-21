@@ -1,12 +1,7 @@
 package br.com.fiap.controller;
 
-import br.com.fiap.dto.AlunoRequest;
-import br.com.fiap.dto.AlunoResponse;
-import br.com.fiap.dto.MatriculaResponse;
-import br.com.fiap.dto.PerfilResponse;
-import br.com.fiap.entity.Aluno;
+import br.com.fiap.dto.*;
 import br.com.fiap.service.AlunoService;
-import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +42,12 @@ public class AlunoResource {
     public ResponseEntity<List<AlunoResponse>> consultarPorNome(@RequestParam String nome) {
         List<AlunoResponse> alunosCadastrados = alunoService.consultarPorNome(nome);
         return ResponseEntity.ok(alunosCadastrados);
+    }
+
+    @GetMapping(path = "/{id}/turmas", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TurmaResponse>> consultarTurmas(@PathVariable Long id) {
+        List<TurmaResponse> turmas = alunoService.consultarTurmas(id);
+        return ResponseEntity.ok(turmas);
     }
 
     @PutMapping(path = "/{codigo}", consumes = MediaType.APPLICATION_JSON_VALUE)
