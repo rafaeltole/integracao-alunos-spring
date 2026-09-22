@@ -10,8 +10,9 @@ import java.util.List;
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
+    //--- consulta utilizando atributos da entidade
     List<Aluno> findByNomeContainsIgnoringCase(String nome);
 
+    //--- verificação utilizando atributos da entidade
     boolean existsByNome(String aluno);
-
 }

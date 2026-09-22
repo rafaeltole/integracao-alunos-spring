@@ -6,19 +6,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity //--- configurando a classe como uma entidade JPA
 public class Aluno {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "aluno_seq", allocationSize = 1)
+    @Id //--- chave primária | PK
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) //--- como as chaves primárias (PK) serão geradas
+    @SequenceGenerator(name = "aluno_seq", allocationSize = 1) //--- responsável pela geração das chaves primárias (PK)
     private Long id;
 
     private String nome;
 
-    @OneToOne(mappedBy = "aluno", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    //--- relacionamento bidirecional
+    @OneToOne(mappedBy = "aluno", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}) //--- Configurando relacionamento com cascade
     private Perfil perfil;
 
+    //--- relacionamento bidirecional
     @OneToMany(mappedBy = "aluno")
     private List<Matricula> matriculas;
 

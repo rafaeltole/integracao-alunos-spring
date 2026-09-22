@@ -13,6 +13,7 @@ public interface TurmaRepository extends JpaRepository<Turma, Long> {
 
     List<Turma> findByMatriculasAlunoId(Long alunoId);
 
+    //--- consulta utilizando JPQL com join entre as entidades
     @Query(value = "SELECT t FROM Turma t JOIN t.matriculas m JOIN m.aluno a WHERE a.id = :alunoId")
     List<Turma> consultarTurmasPorAluno(@Param("alunoId") Long alunoId);
 
