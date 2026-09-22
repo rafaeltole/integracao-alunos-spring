@@ -2,7 +2,7 @@
 
 
 ## Tutorial
-- [Checkpoint 02](tutorial-checkpoint-02)
+- [Checkpoint 02](tutorial-checkpoint-02.md)
 
 
 # Derived Query Methods, paginação e ordenação

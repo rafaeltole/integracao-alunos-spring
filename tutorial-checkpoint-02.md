@@ -10,7 +10,7 @@ Resumo dos tópicos estudados durante o segundo período/bimestre e dos passos a
 
 Antes de iniciar o mapeamento e nos preocuparmos com anotações, analisamos o nosso modelo.
 
-![Modelo de domínio — Aluno, Perfil e Matrícula](assets/modelo-dominio-alunos.png)
+![Modelo de domínio — Aluno, Perfil e Matrícula](./assets/modelo-dominio-alunos.png)
 
 A partir do modelo, identificamos as tabelas e seus relacionamentos.
 
