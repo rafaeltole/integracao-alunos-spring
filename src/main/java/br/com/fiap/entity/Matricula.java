@@ -2,10 +2,9 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 
 @Entity
-public class Matricula {
+public class Matricula extends EntidadeBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -23,10 +22,6 @@ public class Matricula {
     private String rm;
 
     private String status;
-
-    private LocalDate cadastradoEm;
-
-    private LocalDate atualizadoEm;
 
     public Long getId() {
         return id;
@@ -68,19 +63,4 @@ public class Matricula {
         this.status = status;
     }
 
-    public LocalDate getCadastradoEm() {
-        return cadastradoEm;
-    }
-
-    public void setCadastradoEm(LocalDate cadastradoEm) {
-        this.cadastradoEm = cadastradoEm;
-    }
-
-    public LocalDate getAtualizadoEm() {
-        return atualizadoEm;
-    }
-
-    public void setAtualizadoEm(LocalDate atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
-    }
 }

@@ -2,12 +2,11 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
 @Entity
-public class Turma {
+public class Turma extends EntidadeBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -24,11 +23,6 @@ public class Turma {
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
-
-    private LocalDate cadastradoEm;
-
-    private LocalDate atualizadoEm;
-
 
     public Long getId() {
         return id;
@@ -70,19 +64,4 @@ public class Turma {
         this.curso = curso;
     }
 
-    public LocalDate getCadastradoEm() {
-        return cadastradoEm;
-    }
-
-    public void setCadastradoEm(LocalDate cadastradoEm) {
-        this.cadastradoEm = cadastradoEm;
-    }
-
-    public LocalDate getAtualizadoEm() {
-        return atualizadoEm;
-    }
-
-    public void setAtualizadoEm(LocalDate atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
-    }
 }

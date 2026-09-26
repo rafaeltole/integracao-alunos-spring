@@ -2,11 +2,10 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Curso {
+public class Curso extends EntidadeBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,9 +30,6 @@ public class Curso {
     private String nome;
 
     private String status;
-
-    private LocalDate cadastradoEm;
-
 
     public Long getId() {
         return id;
@@ -83,11 +79,4 @@ public class Curso {
         this.status = status;
     }
 
-    public LocalDate getCadastradoEm() {
-        return cadastradoEm;
-    }
-
-    public void setCadastradoEm(LocalDate cadastradoEm) {
-        this.cadastradoEm = cadastradoEm;
-    }
 }

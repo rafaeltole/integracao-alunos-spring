@@ -2,12 +2,10 @@ package br.com.fiap.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity //--- configurando a classe como uma entidade JPA
-public class Aluno {
+public class Aluno extends EntidadeBase {
 
     @Id //--- chave primária | PK
     @GeneratedValue(strategy = GenerationType.SEQUENCE) //--- como as chaves primárias (PK) serão geradas
@@ -17,26 +15,15 @@ public class Aluno {
     private String nome;
 
     //--- relacionamento bidirecional
-    @OneToOne(mappedBy = "aluno", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}) //--- Configurando relacionamento com cascade
+    @OneToOne(mappedBy = "aluno", cascade = { //--- Configurando relacionamento com cascade
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REMOVE})
     private Perfil perfil;
 
     //--- relacionamento bidirecional
     @OneToMany(mappedBy = "aluno")
     private List<Matricula> matriculas;
-
-    private LocalDate cadastradoEm;
-
-    private LocalDateTime atualizadoEm;
-
-    @PrePersist
-    public void configuraDataCadastro() {
-        cadastradoEm = LocalDate.now();
-    }
-
-    @PreUpdate
-    public void configuraDataAtualizacao() {
-        atualizadoEm = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;
@@ -68,14 +55,6 @@ public class Aluno {
 
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
-    }
-
-    public LocalDate getCadastradoEm() {
-        return cadastradoEm;
-    }
-
-    public LocalDateTime getAtualizadoEm() {
-        return atualizadoEm;
     }
 
 }
