@@ -163,8 +163,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/autenticacao/**").permitAll()
                         .anyRequest().authenticated()
+                        .httpBasic(Customizer.withDefaults())
                 );
 
         return http.build();
@@ -178,7 +179,7 @@ Configuração autenticação básica HTTP (HTTP Basic Auth). Classe SecurityCon
 
 ```java
 @Bean
-UserDetailsService userDetailsService() {
+InMemoryUserDetailsManager userDetailsService() {
     UserDetails usuario = User.builder()
             .username("login_aluno")
             .password("123456")
@@ -200,7 +201,36 @@ GET /alunos
 - username: `login_aluno`
 - password: `123456`
 
+Configurando provedor e gerenciado de autenticação
+```java
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
+        return configuration.getAuthenticationManager();
+    }
 
+    @Bean
+    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        return provider;
+    }
+```
+
+Configurando criptografia senha
+```java
+@Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+//        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+```
 
 ## Referências
 
