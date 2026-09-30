@@ -1,6 +1,11 @@
 package br.com.fiap.service;
 
-import br.com.fiap.dto.*;
+import br.com.fiap.dto.AlunoRequest;
+import br.com.fiap.dto.AlunoResponse;
+import br.com.fiap.dto.MatriculaResponse;
+import br.com.fiap.dto.PerfilRequest;
+import br.com.fiap.dto.PerfilResponse;
+import br.com.fiap.dto.TurmaResponse;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.entity.Matricula;
 import br.com.fiap.entity.Perfil;
@@ -8,9 +13,10 @@ import br.com.fiap.entity.Turma;
 import br.com.fiap.exception.AlunoNaoEncontradoException;
 import br.com.fiap.repository.AlunoRepository;
 import br.com.fiap.repository.TurmaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +24,8 @@ import java.util.Optional;
 @Service
 public class AlunoService {
 
-    private AlunoRepository alunoRepository;
-    private TurmaRepository turmaRepository;
+    private final AlunoRepository alunoRepository;
+    private final TurmaRepository turmaRepository;
 
     public AlunoService(AlunoRepository alunoRepository, TurmaRepository turmaRepository) {
         this.alunoRepository = alunoRepository;
@@ -40,17 +46,24 @@ public class AlunoService {
         return AlunoResponse.from(alunoCadastrado);
     }
 
-    public List<AlunoResponse> consultar() {
-        List<AlunoResponse> alunosResponse = new ArrayList<>();
+    //--- consulta de alunos utilizando paginação e filtro por nome
+    public Page<AlunoResponse> consultar(String nome, Pageable paginacao) {
+//        List<AlunoResponse> alunosResponse = new ArrayList<>();
 
-        List<Aluno> alunosCadastrados = alunoRepository.findAll();
-
-        for (Aluno alunoCadastrado : alunosCadastrados) {
-            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
-            alunosResponse.add(alunoResponse);
+//        List<Aluno> alunosCadastrados = alunoRepository.findAll(paginacao);
+        Page<Aluno> alunosCadastrados;
+        if (nome != null) {
+            alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome, paginacao);
+        } else {
+            alunosCadastrados = alunoRepository.findAll(paginacao);
         }
 
-        return alunosResponse;
+//        for (Aluno alunoCadastrado : alunosCadastrados) {
+//            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
+//            alunosResponse.add(alunoResponse);
+//        }
+
+        return alunosCadastrados.map(AlunoResponse::from);
     }
 
     public AlunoResponse consultarPorCodigo(Long codigo) {
@@ -61,18 +74,18 @@ public class AlunoService {
         throw new AlunoNaoEncontradoException("Aluno [codigo=" + codigo + "] não encontrado.");
     }
 
-    public List<AlunoResponse> consultarPorNome(String nome) {
-        List<AlunoResponse> alunosResponse = new ArrayList<>();
-
-        List<Aluno> alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome);
-
-        for (Aluno alunoCadastrado : alunosCadastrados) {
-            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
-            alunosResponse.add(alunoResponse);
-        }
-
-        return alunosResponse;
-    }
+//    public List<AlunoResponse> consultarPorNome(String nome) {
+//        List<AlunoResponse> alunosResponse = new ArrayList<>();
+//
+//        List<Aluno> alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome);
+//
+//        for (Aluno alunoCadastrado : alunosCadastrados) {
+//            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
+//            alunosResponse.add(alunoResponse);
+//        }
+//
+//        return alunosResponse;
+//    }
 
     public AlunoResponse atualizar(Long codigo, AlunoRequest aluno) {
         Optional<Aluno> retornoConsulta = alunoRepository.findById(codigo);

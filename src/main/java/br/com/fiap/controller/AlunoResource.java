@@ -3,6 +3,9 @@ package br.com.fiap.controller;
 import br.com.fiap.dto.*;
 import br.com.fiap.service.AlunoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +30,11 @@ public class AlunoResource {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AlunoResponse>> consultar() {
-        List<AlunoResponse> alunosCadastrados = alunoService.consultar();
+    public ResponseEntity<Page<AlunoResponse>> consultar(
+            @RequestParam(required = false) String nome,
+            @PageableDefault(page = 0, size = 10, sort = "nome") Pageable paginacao) {
+//        List<AlunoResponse> alunosCadastrados = alunoService.consultar(paginacao);
+        Page<AlunoResponse> alunosCadastrados = alunoService.consultar(nome, paginacao);
         return ResponseEntity.ok(alunosCadastrados);
     }
 
@@ -38,11 +44,11 @@ public class AlunoResource {
         return ResponseEntity.ok(alunoResponse);
     }
 
-    @GetMapping(params = "nome", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AlunoResponse>> consultarPorNome(@RequestParam String nome) {
-        List<AlunoResponse> alunosCadastrados = alunoService.consultarPorNome(nome);
-        return ResponseEntity.ok(alunosCadastrados);
-    }
+//    @GetMapping(params = "nome", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<AlunoResponse>> consultarPorNome(@RequestParam String nome) {
+//        List<AlunoResponse> alunosCadastrados = alunoService.consultarPorNome(nome);
+//        return ResponseEntity.ok(alunosCadastrados);
+//    }
 
     @GetMapping(path = "/{id}/turmas", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TurmaResponse>> consultarTurmas(@PathVariable Long id) {
