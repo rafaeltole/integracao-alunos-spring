@@ -1,11 +1,6 @@
 package br.com.fiap.service;
 
-import br.com.fiap.dto.AlunoRequest;
-import br.com.fiap.dto.AlunoResponse;
-import br.com.fiap.dto.MatriculaResponse;
-import br.com.fiap.dto.PerfilRequest;
-import br.com.fiap.dto.PerfilResponse;
-import br.com.fiap.dto.TurmaResponse;
+import br.com.fiap.dto.*;
 import br.com.fiap.entity.Aluno;
 import br.com.fiap.entity.Matricula;
 import br.com.fiap.entity.Perfil;
@@ -18,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -48,49 +44,28 @@ public class AlunoService {
 
     //--- consulta de alunos utilizando paginação e filtro por nome
     public Page<AlunoResponse> consultar(String nome, Pageable paginacao) {
-//        List<AlunoResponse> alunosResponse = new ArrayList<>();
-
-//        List<Aluno> alunosCadastrados = alunoRepository.findAll(paginacao);
         Page<Aluno> alunosCadastrados;
-        if (nome != null) {
-            alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome, paginacao);
-        } else {
+        if (Objects.isNull(nome)) {
             alunosCadastrados = alunoRepository.findAll(paginacao);
+        } else {
+            alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome, paginacao);
         }
-
-//        for (Aluno alunoCadastrado : alunosCadastrados) {
-//            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
-//            alunosResponse.add(alunoResponse);
-//        }
 
         return alunosCadastrados.map(AlunoResponse::from);
     }
 
-    public AlunoResponse consultarPorCodigo(Long codigo) {
-        Optional<Aluno> retornoConsulta = alunoRepository.findById(codigo);
+    public AlunoResponse consultarPorCodigo(Long alunoId) {
+        Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
         if (retornoConsulta.isPresent()) {
             return AlunoResponse.from(retornoConsulta.get());
         }
-        throw new AlunoNaoEncontradoException("Aluno [codigo=" + codigo + "] não encontrado.");
+        throw new AlunoNaoEncontradoException(alunoId);
     }
 
-//    public List<AlunoResponse> consultarPorNome(String nome) {
-//        List<AlunoResponse> alunosResponse = new ArrayList<>();
-//
-//        List<Aluno> alunosCadastrados = alunoRepository.findByNomeContainsIgnoringCase(nome);
-//
-//        for (Aluno alunoCadastrado : alunosCadastrados) {
-//            AlunoResponse alunoResponse = AlunoResponse.from(alunoCadastrado);
-//            alunosResponse.add(alunoResponse);
-//        }
-//
-//        return alunosResponse;
-//    }
-
-    public AlunoResponse atualizar(Long codigo, AlunoRequest aluno) {
-        Optional<Aluno> retornoConsulta = alunoRepository.findById(codigo);
+    public AlunoResponse atualizar(Long alunoId, AlunoRequest aluno) {
+        Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
         if (retornoConsulta.isEmpty()) {
-            throw new AlunoNaoEncontradoException("Aluno [codigo=" + codigo + "] não encontrado.");
+            throw new AlunoNaoEncontradoException(alunoId);
         }
 
         Aluno alunoCadastrado = retornoConsulta.get();
@@ -107,25 +82,24 @@ public class AlunoService {
         return AlunoResponse.from(alunoAtualizado);
     }
 
-    public void remover(Long codigo) {
-        Optional<Aluno> retornoConsulta = alunoRepository.findById(codigo);
-        if (retornoConsulta.isPresent()) {
-            alunoRepository.deleteById(codigo);
+    public void remover(Long alunoId) {
+        Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
+        if (retornoConsulta.isEmpty()) {
+            throw new AlunoNaoEncontradoException(alunoId);
         }
+        alunoRepository.deleteById(alunoId);
     }
 
     public List<MatriculaResponse> consultarMatriculas(Long alunoId) {
         Optional<Aluno> retornoConsulta = alunoRepository.findById(alunoId);
         if (retornoConsulta.isEmpty()) {
-            throw new AlunoNaoEncontradoException("Aluno [id=" + alunoId + "] não encontrado");
+            throw new AlunoNaoEncontradoException(alunoId);
         }
 
         Aluno aluno = retornoConsulta.get();
         List<Matricula> matriculas = aluno.getMatriculas();
 
-        List<MatriculaResponse> matriculasResponse = MatriculaResponse.from(matriculas);
-
-        return matriculasResponse;
+        return MatriculaResponse.from(matriculas);
     }
 
     public List<TurmaResponse> consultarTurmas(Long alunoId) {
@@ -142,7 +116,7 @@ public class AlunoService {
 
             return PerfilResponse.from(alunoId, perfil);
         }
-        throw new AlunoNaoEncontradoException("Aluno [id=" + alunoId + "] não encontrado");
+        throw new AlunoNaoEncontradoException(alunoId);
     }
 
 }

@@ -17,13 +17,13 @@ import java.util.List;
 @RequestMapping("/alunos")
 public class AlunoResource {
 
-    private AlunoService alunoService;
+    private final AlunoService alunoService;
 
     public AlunoResource(AlunoService alunoService) {
         this.alunoService = alunoService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AlunoResponse> cadastrar(@Valid @RequestBody AlunoRequest novoAluno) {
         AlunoResponse alunoResponse = alunoService.cadastrar(novoAluno);
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(alunoResponse);
@@ -33,50 +33,43 @@ public class AlunoResource {
     public ResponseEntity<Page<AlunoResponse>> consultar(
             @RequestParam(required = false) String nome,
             @PageableDefault(page = 0, size = 10, sort = "nome") Pageable paginacao) {
-//        List<AlunoResponse> alunosCadastrados = alunoService.consultar(paginacao);
         Page<AlunoResponse> alunosCadastrados = alunoService.consultar(nome, paginacao);
         return ResponseEntity.ok(alunosCadastrados);
     }
 
-    @GetMapping(path = "/{codigo}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AlunoResponse> consultarPorCodigo(@PathVariable Long codigo) {
-        AlunoResponse alunoResponse = alunoService.consultarPorCodigo(codigo);
+    @GetMapping(path = "/{alunoId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AlunoResponse> consultarPorCodigo(@PathVariable Long alunoId) {
+        AlunoResponse alunoResponse = alunoService.consultarPorCodigo(alunoId);
         return ResponseEntity.ok(alunoResponse);
     }
 
-//    @GetMapping(params = "nome", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<List<AlunoResponse>> consultarPorNome(@RequestParam String nome) {
-//        List<AlunoResponse> alunosCadastrados = alunoService.consultarPorNome(nome);
-//        return ResponseEntity.ok(alunosCadastrados);
-//    }
-
-    @GetMapping(path = "/{id}/turmas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TurmaResponse>> consultarTurmas(@PathVariable Long id) {
-        List<TurmaResponse> turmas = alunoService.consultarTurmas(id);
+    @GetMapping(path = "/{alunoId}/turmas", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TurmaResponse>> consultarTurmas(@PathVariable Long alunoId) {
+        List<TurmaResponse> turmas = alunoService.consultarTurmas(alunoId);
         return ResponseEntity.ok(turmas);
     }
 
-    @PutMapping(path = "/{codigo}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AlunoResponse> atualizar(@PathVariable Long codigo, @Valid @RequestBody AlunoRequest aluno) {
-        AlunoResponse alunoResponse = alunoService.atualizar(codigo, aluno);
+    @PutMapping(path = "/{alunoId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AlunoResponse> atualizar(@PathVariable Long alunoId, @Valid @RequestBody AlunoRequest aluno) {
+        AlunoResponse alunoResponse = alunoService.atualizar(alunoId, aluno);
         return ResponseEntity.ok(alunoResponse);
     }
 
-    @DeleteMapping(path = "/{codigo}")
-    public ResponseEntity<Object> remover(@PathVariable Long codigo) {
-        alunoService.remover(codigo);
+    @DeleteMapping(path = "/{alunoId}")
+    public ResponseEntity<Void> remover(@PathVariable Long alunoId) {
+        alunoService.remover(alunoId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/{id}/matriculas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MatriculaResponse>> consultarMatriculas(@PathVariable Long id) {
-        List<MatriculaResponse> matriculas = alunoService.consultarMatriculas(id);
+    @GetMapping(path = "/{alunoId}/matriculas", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MatriculaResponse>> consultarMatriculas(@PathVariable Long alunoId) {
+        List<MatriculaResponse> matriculas = alunoService.consultarMatriculas(alunoId);
         return ResponseEntity.ok(matriculas);
     }
 
-    @GetMapping(path = "/{id}/perfil", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PerfilResponse> consultarPerfil(@PathVariable Long id) {
-        PerfilResponse perfilResponse = alunoService.consultarPerfil(id);
+    @GetMapping(path = "/{alunoId}/perfil", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PerfilResponse> consultarPerfil(@PathVariable Long alunoId) {
+        PerfilResponse perfilResponse = alunoService.consultarPerfil(alunoId);
         return ResponseEntity.ok(perfilResponse);
     }
 

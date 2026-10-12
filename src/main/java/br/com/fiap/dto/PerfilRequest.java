@@ -4,8 +4,8 @@ import br.com.fiap.entity.Perfil;
 import jakarta.validation.constraints.NotBlank;
 
 public record PerfilRequest(
-        @NotBlank(message = "O titulo deve ser informado") String titulo,
-        @NotBlank(message = "O descricao deve ser informado") String descricao) {
+        @NotBlank(message = "O título deve ser informado") String titulo,
+        @NotBlank(message = "A descrição deve ser informada") String descricao) {
 
     public Perfil toEntity() {
         Perfil perfil = new Perfil();
