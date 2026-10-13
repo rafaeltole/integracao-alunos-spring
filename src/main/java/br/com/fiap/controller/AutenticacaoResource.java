@@ -29,7 +29,7 @@ public class AutenticacaoResource {
     @Operation(
             summary = "Autenticar usuário.",
             description = "Responsável pela autenticação do usuário",
-            security = @SecurityRequirement(name = "basicAuth")) //---configuração necessária somente se aplicação estiver usando Spring Security
+            security = @SecurityRequirement(name = "basicAuth")) //---configuração necessária somente se aplicação estiver usando Spring Security. Autenticação HTTP Basic
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
