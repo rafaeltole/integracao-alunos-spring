@@ -122,7 +122,15 @@ public class ConfiguracoesDeSeguranca {
 
                 //--- configurando acesso as URLs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/autenticacao/**").permitAll() //--- acesso permitido sem autenticação
+                        //--- acesso permitido sem autenticação
+                        .requestMatchers("/autenticacao/**")
+                        .permitAll()
+
+                        //--- acesso a documentação OpenAPI permitido sem autenticação
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**")
+                        .permitAll()
 
                         //--- acesso ao cadastro de alunos somente para usuários autenticados que tenham role (papel) ALUNO
                         .requestMatchers(HttpMethod.POST, "/alunos")

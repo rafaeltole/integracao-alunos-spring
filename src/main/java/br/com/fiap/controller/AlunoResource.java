@@ -2,7 +2,16 @@ package br.com.fiap.controller;
 
 import br.com.fiap.dto.*;
 import br.com.fiap.service.AlunoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
+@Tag(name = "Alunos", description = "API de Alunos com as operações CRUD.")
 public class AlunoResource {
 
     private final AlunoService alunoService;
@@ -23,22 +33,78 @@ public class AlunoResource {
         this.alunoService = alunoService;
     }
 
+    @Operation(
+            summary = "Cadastrar aluno",
+            description = "Responsável pelo cadastro de alunos.",
+            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Aluno cadastrado com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = AlunoResponse.class
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Falha durante a validação dos dados do aluno.",
+                    content = @Content
+            )
+    })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Dados do aluno a ser cadastrado.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlunoRequest.class)))
     public ResponseEntity<AlunoResponse> cadastrar(@Valid @RequestBody AlunoRequest novoAluno) {
         AlunoResponse alunoResponse = alunoService.cadastrar(novoAluno);
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(alunoResponse);
     }
 
+    @Operation(
+            summary = "Listar alunos",
+            description = "Listar alunos cadastrados.",
+            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista com os alunos cadastrados."
+            )
+    })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<AlunoResponse>> consultar(
-            @RequestParam(required = false) String nome,
-            @PageableDefault(page = 0, size = 10, sort = "nome") Pageable paginacao) {
+            @Parameter(description = "Nome do aluno") @RequestParam(required = false) String nome,
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "nome") Pageable paginacao) {
         Page<AlunoResponse> alunosCadastrados = alunoService.consultar(nome, paginacao);
         return ResponseEntity.ok(alunosCadastrados);
     }
 
+    @Operation(
+            summary = "Consultar aluno pelo código",
+            description = "Consulta aluno utilizando o identificador.",
+            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Aluno encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = AlunoResponse.class
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Aluno não encontrado",
+                    content = @Content
+            )
+    })
     @GetMapping(path = "/{alunoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AlunoResponse> consultarPorCodigo(@PathVariable Long alunoId) {
+    public ResponseEntity<AlunoResponse> consultarPorCodigo(@Parameter(required = true, description = "Código do aluno") @PathVariable Long alunoId) {
         AlunoResponse alunoResponse = alunoService.consultarPorCodigo(alunoId);
         return ResponseEntity.ok(alunoResponse);
     }
