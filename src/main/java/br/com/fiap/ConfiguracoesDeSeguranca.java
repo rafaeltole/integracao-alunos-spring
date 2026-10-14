@@ -92,7 +92,7 @@ public class ConfiguracoesDeSeguranca {
     }
 
     @Bean
-    //--- Configuração da classe responsável por decodificar e validar a assinatura do Token JWT
+    //--- Configuração da classe responsável por decodificar e validar integridade e autenticidade do Token JWT
     public JwtDecoder jwtDecoder(SecretKey secretKey) {
         return NimbusJwtDecoder
                 .withSecretKey(secretKey)
@@ -116,21 +116,21 @@ public class ConfiguracoesDeSeguranca {
 
     //--- Configurações para Autorização de acessos
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) {
         return http
                 .csrf(csrf -> csrf.disable())
 
                 //--- configurando acesso as URLs
                 .authorizeHttpRequests(auth -> auth
-                        //--- acesso permitido sem autenticação
-                        .requestMatchers("/autenticacao/**")
-                        .permitAll()
-
                         //--- acesso a documentação OpenAPI permitido sem autenticação
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**")
                         .permitAll()
+
+                        // o login exige HTTP Basic.
+                        .requestMatchers(HttpMethod.POST,"/autenticacao/login")
+                        .authenticated()
 
                         //--- acesso ao cadastro de alunos somente para usuários autenticados que tenham role (papel) ALUNO
                         .requestMatchers(HttpMethod.POST, "/alunos")
@@ -144,11 +144,19 @@ public class ConfiguracoesDeSeguranca {
                         .requestMatchers(HttpMethod.GET, "/alunos/**")
                         .hasAnyRole(Roles.ALUNO.name(), Roles.COORDENADOR.name())
 
+                        //--- acesso a remoção de alunos somente para usuários autenticados que tenham role (papel) COORDENADOR
+                        .requestMatchers(HttpMethod.DELETE, "/alunos/**")
+                        .hasRole(Roles.COORDENADOR.name())
+
                         //--- acesso as demais URLs somente para usuários autenticados independente a role (papel) do usuário
                         .anyRequest()
                         .authenticated())
+
                 .httpBasic(Customizer.withDefaults()) //--- configurando tipo de autenticação. HTTP Basic
-                .oauth2ResourceServer(resource -> resource.jwt(Customizer.withDefaults())) //--- configuração ao token JWT
+
+                .oauth2ResourceServer(resource -> resource.
+                        jwt(config -> config.jwtAuthenticationConverter(jwtAuthenticationConverter))) //--- configuração ao token JWT
+
                 .build();
     }
 

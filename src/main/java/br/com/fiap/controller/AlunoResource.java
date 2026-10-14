@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
-@Tag(name = "Alunos", description = "API de Alunos com as operações CRUD.")
+@Tag(name = "Alunos", description = "API de Alunos com operações CRUD.")
 public class AlunoResource {
 
     private final AlunoService alunoService;
@@ -36,7 +36,7 @@ public class AlunoResource {
     @Operation(
             summary = "Cadastrar aluno",
             description = "Responsável pelo cadastro de alunos.",
-            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+            security = @SecurityRequirement(name = "bearerAuth") //--- somente se aplicação estiver usando Spring Security
     )
     @ApiResponses({
             @ApiResponse(
@@ -53,10 +53,17 @@ public class AlunoResource {
                     responseCode = "400",
                     description = "Falha durante a validação dos dados do aluno.",
                     content = @Content
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Não autenticado."),
+            @ApiResponse(responseCode = "403", description = "Sem permissão.")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Dados do aluno a ser cadastrado.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlunoRequest.class)))
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            required = true,
+            description = "Dados do aluno a ser cadastrado.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = AlunoRequest.class)))
     public ResponseEntity<AlunoResponse> cadastrar(@Valid @RequestBody AlunoRequest novoAluno) {
         AlunoResponse alunoResponse = alunoService.cadastrar(novoAluno);
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(alunoResponse);
@@ -64,14 +71,16 @@ public class AlunoResource {
 
     @Operation(
             summary = "Listar alunos",
-            description = "Listar alunos cadastrados.",
-            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+            description = "Listar alunos cadastrados com paginação.",
+            security = @SecurityRequirement(name = "bearerAuth") //--- somente se aplicação estiver usando Spring Security
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
                     description = "Lista com os alunos cadastrados."
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Não autenticado."),
+            @ApiResponse(responseCode = "403", description = "Sem permissão.")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<AlunoResponse>> consultar(
@@ -83,8 +92,8 @@ public class AlunoResource {
 
     @Operation(
             summary = "Consultar aluno pelo código",
-            description = "Consulta aluno utilizando o identificador.",
-            security = @SecurityRequirement(name = "bearerAuth") //---configuração necessária somente se aplicação estiver usando Spring Security
+            description = "Consulta um aluno pelo identificador.",
+            security = @SecurityRequirement(name = "bearerAuth") //--- somente se aplicação estiver usando Spring Security
     )
     @ApiResponses({
             @ApiResponse(
@@ -101,7 +110,9 @@ public class AlunoResource {
                     responseCode = "404",
                     description = "Aluno não encontrado",
                     content = @Content
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Não autenticado."),
+            @ApiResponse(responseCode = "403", description = "Sem permissão.")
     })
     @GetMapping(path = "/{alunoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AlunoResponse> consultarPorCodigo(@Parameter(required = true, description = "Código do aluno") @PathVariable Long alunoId) {

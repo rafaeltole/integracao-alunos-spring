@@ -28,8 +28,8 @@ public class AutenticacaoResource {
 
     @Operation(
             summary = "Autenticar usuário.",
-            description = "Responsável pela autenticação do usuário",
-            security = @SecurityRequirement(name = "basicAuth")) //---configuração necessária somente se aplicação estiver usando Spring Security. Autenticação HTTP Basic
+            description = "Autentica via HTTP Basic e retorna um Token JWT.",
+            security = @SecurityRequirement(name = "basicAuth")) //--- somente se aplicação estiver usando Spring Security. Autenticação HTTP Basic
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -43,7 +43,7 @@ public class AutenticacaoResource {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Usuário ou senha inválido.",
+                    description = "Credenciais inválidas.",
                     content = @Content
             )
     })

@@ -16,9 +16,9 @@ import java.util.List;
 public class GeradorTokenJWTService {
 
     private static final String TIPO_TOKEN = "Bearer";
-    private static final Integer VALIDADE_TOKEN_EM_SEGUNDOS = 300;
+    private static final Integer VALIDADE_TOKEN_EM_SEGUNDOS = 300; //--- 5 minutos
 
-    //--- Responsável por assinar o Token JWT, garantindo que não ocorram alterações no conteúdo
+    //--- Responsável por assinar o Token JWT, permitindo verificar sua integridade e autenticidade
     private final JwtEncoder jwtEncoder;
 
     public GeradorTokenJWTService(JwtEncoder jwtEncoder) {
